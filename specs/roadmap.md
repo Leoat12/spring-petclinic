@@ -8,10 +8,10 @@ Small phases, each deliverable and testable on its own.
 
 Set up containerization and CI so every subsequent phase has automated verification.
 
-- [ ] Add a multi-stage `Dockerfile` for reproducible container builds
-- [ ] Add `.dockerignore`
-- [ ] Add GitHub Actions workflow: build, test, and publish container image
-- [ ] Verify: pushing to `main` triggers a green CI run
+- [x] Add a multi-stage `Dockerfile` for reproducible container builds
+- [x] Add `.dockerignore`
+- [x] Add GitHub Actions workflow: build, test, and publish container image
+- [x] Verify: pushing to `main` triggers a green CI run
 
 ---
 
