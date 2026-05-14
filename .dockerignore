@@ -4,12 +4,10 @@
 .vscode
 .mvn/wrapper/maven-wrapper.jar
 build
-gradle
-gradlew
 gradlew.bat
 k8s
 out
-settings.gradle
+
 specs
 target
 *.iws
