@@ -31,11 +31,11 @@ Expose the existing domain (Owners, Pets, Visits, Vets, Specialties) as JSON res
 
 Remove Maven support; standardize on Gradle as the sole build tool.
 
-- [ ] Remove `pom.xml` and all Maven-specific configuration
-- [ ] Ensure the Gradle build covers all functionality previously handled by Maven (build, test, format, checkstyle, JaCoCo, etc.)
-- [ ] Update CI workflow to use Gradle exclusively
-- [ ] Update documentation and scripts to reference Gradle commands only
-- [ ] Verify: `./gradlew build` produces the same artifact; CI passes with Gradle only
+- [x] Remove `pom.xml` and all Maven-specific configuration
+- [x] Ensure the Gradle build covers all functionality previously handled by Maven (build, test, format, checkstyle, JaCoCo, etc.)
+- [x] Update CI workflow to use Gradle exclusively
+- [x] Update documentation and scripts to reference Gradle commands only
+- [x] Verify: `./gradlew build` produces the same artifact; CI passes with Gradle only
 
 ---
 
