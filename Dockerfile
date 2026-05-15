@@ -4,7 +4,7 @@ COPY gradle/ gradle/
 COPY gradlew build.gradle settings.gradle ./
 RUN ./gradlew dependencies --no-daemon
 COPY src src/
-RUN ./gradlew bootJar --no-daemon -x test
+RUN ./gradlew bootJar --no-daemon -x test -x generateGitProperties
 
 FROM eclipse-temurin:21-jre-alpine
 RUN addgroup -S spring && adduser -S spring -G spring
