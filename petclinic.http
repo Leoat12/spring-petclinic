@@ -1,0 +1,113 @@
+###
+### Spring PetClinic — IntelliJ HTTP Client
+###
+### Run these requests against a local dev server:
+###   ./gradlew bootRun
+###
+### The default profile uses H2 in-memory database with seed data,
+### so IDs are predictable from a fresh start.
+###
+
+@baseUrl = http://localhost:8080
+@ownerId = 2
+@petId = 2
+@vetId = 1
+
+### ---------------------------------------------------------------------------
+### Owners
+### ---------------------------------------------------------------------------
+
+### List owners (page 1, default size 20)
+GET {{baseUrl}}/api/v1/owners
+
+### List owners (page 2, size 5)
+GET {{baseUrl}}/api/v1/owners?page=2&size=5
+
+### Get owner by ID (George Franklin)
+GET {{baseUrl}}/api/v1/owners/{{ownerId}}
+
+### Create a new owner
+POST {{baseUrl}}/api/v1/owners
+Content-Type: application/json
+
+{
+  "firstName": "Alice",
+  "lastName": "Wonderland",
+  "address": "123 Rabbit Hole",
+  "city": "Wonderland",
+  "telephone": "5551234567"
+}
+
+### Update an existing owner
+PUT {{baseUrl}}/api/v1/owners/{{ownerId}}
+Content-Type: application/json
+
+{
+  "firstName": "George",
+  "lastName": "Franklin",
+  "address": "110 W. Liberty St.",
+  "city": "Madison",
+  "telephone": "6085551023"
+}
+
+### Delete an owner
+DELETE {{baseUrl}}/api/v1/owners/{{ownerId}}
+
+### ---------------------------------------------------------------------------
+### Pets
+### ---------------------------------------------------------------------------
+
+### List pets for an owner (George Franklin, owner 1)
+GET {{baseUrl}}/api/v1/owners/{{ownerId}}/pets
+
+### Get a specific pet (Leo the cat, pet 1, owner 1)
+GET {{baseUrl}}/api/v1/owners/{{ownerId}}/pets/{{petId}}
+
+### Add a pet to an owner (owner 1, type: cat = 1)
+POST {{baseUrl}}/api/v1/owners/{{ownerId}}/pets
+Content-Type: application/json
+
+{
+  "name": "Whiskers",
+  "birthDate": "2024-01-15",
+  "typeId": 1
+}
+
+### Update a pet (pet 1, owner 1)
+PUT {{baseUrl}}/api/v1/owners/{{ownerId}}/pets/{{petId}}
+Content-Type: application/json
+
+{
+  "name": "Leo",
+  "birthDate": "2010-09-07",
+  "typeId": 1
+}
+
+### Delete a pet
+DELETE {{baseUrl}}/api/v1/owners/{{ownerId}}/pets/{{petId}}
+
+### ---------------------------------------------------------------------------
+### Visits
+### ---------------------------------------------------------------------------
+
+### List visits for a pet (pet 7, owner 6 — Samantha the cat)
+GET {{baseUrl}}/api/v1/owners/6/pets/7/visits
+
+### Add a visit to a pet (pet 1, owner 1)
+POST {{baseUrl}}/api/v1/owners/{{ownerId}}/pets/{{petId}}/visits
+Content-Type: application/json
+
+{
+  "date": "2025-06-01",
+  "description": "annual checkup"
+}
+
+### ---------------------------------------------------------------------------
+### Vets
+### ---------------------------------------------------------------------------
+
+### List vets (page 1, default size 20)
+GET {{baseUrl}}/api/v1/vets
+
+### Get vet by ID (James Carter)
+GET {{baseUrl}}/api/v1/vets/{{vetId}}
