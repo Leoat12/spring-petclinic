@@ -52,7 +52,18 @@ Remove MySQL compatibility; PostgreSQL becomes the sole production database. H2 
 
 ---
 
-## Phase 4 — Testing Improvements
+## Phase 4 — IntelliJ HTTP Client File
+
+Add a `.http` file covering all existing REST API endpoints so developers can exercise the API directly from IntelliJ IDEA after each feature.
+
+- [ ] Create `petclinic.http` in the project root with requests for all 14 REST endpoints
+- [ ] Use sample data IDs and payloads matching the H2 seed data
+- [ ] Organize requests by domain (Owners, Pets, Visits, Vets) with clear comments
+- [ ] Verify: every request in the file runs successfully against a fresh local `dev` profile
+
+---
+
+## Phase 5 — Testing Improvements
 
 Harden the test suite on the simplified database setup before deeper migrations.
 
@@ -64,7 +75,7 @@ Harden the test suite on the simplified database setup before deeper migrations.
 
 ---
 
-## Phase 5 — Migrate to Spring Data JDBC
+## Phase 6 — Migrate to Spring Data JDBC
 
 Replace Spring Data JPA with Spring Data JDBC for explicit SQL queries and better control.
 
@@ -77,7 +88,7 @@ Replace Spring Data JPA with Spring Data JDBC for explicit SQL queries and bette
 
 ---
 
-## Phase 6 — Kotlin Migration: Setup & Models
+## Phase 7 — Kotlin Migration: Setup & Models
 
 Add Kotlin support to the project and migrate the domain model layer.
 
@@ -88,7 +99,7 @@ Add Kotlin support to the project and migrate the domain model layer.
 
 ---
 
-## Phase 7 — Owner Email Feature
+## Phase 8 — Owner Email Feature
 
 First feature from TODO.md. Built on the new Kotlin models + Spring Data JDBC foundation.
 
@@ -100,7 +111,7 @@ First feature from TODO.md. Built on the new Kotlin models + Spring Data JDBC fo
 
 ---
 
-## Phase 8 — Kotlin Migration: Repositories & Services
+## Phase 9 — Kotlin Migration: Repositories & Services
 
 Migrate repository and service layers to Kotlin.
 
@@ -110,7 +121,7 @@ Migrate repository and service layers to Kotlin.
 
 ---
 
-## Phase 9 — Feedback Form Feature
+## Phase 10 — Feedback Form Feature
 
 Second feature from TODO.md. Exercises the full Kotlin + JDBC stack.
 
@@ -123,7 +134,7 @@ Second feature from TODO.md. Exercises the full Kotlin + JDBC stack.
 
 ---
 
-## Phase 10 — Kotlin Migration: Controllers & Configuration
+## Phase 11 — Kotlin Migration: Controllers & Configuration
 
 Migrate controllers and configuration to Kotlin; complete the language migration.
 
@@ -134,7 +145,7 @@ Migrate controllers and configuration to Kotlin; complete the language migration
 
 ---
 
-## Phase 11 — Vue.js Frontend (Initial Scaffold)
+## Phase 12 — Vue.js Frontend (Initial Scaffold)
 
 Introduce Vue.js to replace Thymeleaf views incrementally.
 
@@ -146,7 +157,7 @@ Introduce Vue.js to replace Thymeleaf views incrementally.
 
 ---
 
-## Phase 12 — Vue.js Owners Pages
+## Phase 13 — Vue.js Owners Pages
 
 Migrate the Owners domain from Thymeleaf to Vue.js.
 
@@ -158,7 +169,7 @@ Migrate the Owners domain from Thymeleaf to Vue.js.
 
 ---
 
-## Phase 13 — Vue.js Vets Page
+## Phase 14 — Vue.js Vets Page
 
 Migrate the Vets domain from Thymeleaf to Vue.js.
 
@@ -168,7 +179,7 @@ Migrate the Vets domain from Thymeleaf to Vue.js.
 
 ---
 
-## Phase 14 — Vue.js Pet and Visit Pages
+## Phase 15 — Vue.js Pet and Visit Pages
 
 Migrate Pet and Visit management from Thymeleaf to Vue.js.
 
@@ -179,7 +190,7 @@ Migrate Pet and Visit management from Thymeleaf to Vue.js.
 
 ---
 
-## Phase 15 — Vue.js Feedback Page
+## Phase 16 — Vue.js Feedback Page
 
 Migrate the Feedback form from Thymeleaf to Vue.js.
 
@@ -189,7 +200,7 @@ Migrate the Feedback form from Thymeleaf to Vue.js.
 
 ---
 
-## Phase 16 — Remove Thymeleaf
+## Phase 17 — Remove Thymeleaf
 
 Once all views have been migrated, clean up the server-rendered layer.
 
