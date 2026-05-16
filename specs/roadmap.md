@@ -56,10 +56,10 @@ Remove MySQL compatibility; PostgreSQL becomes the sole production database. H2 
 
 Add a `.http` file covering all existing REST API endpoints so developers can exercise the API directly from IntelliJ IDEA after each feature.
 
-- [ ] Create `petclinic.http` in the project root with requests for all 14 REST endpoints
-- [ ] Use sample data IDs and payloads matching the H2 seed data
-- [ ] Organize requests by domain (Owners, Pets, Visits, Vets) with clear comments
-- [ ] Verify: every request in the file runs successfully against a fresh local `dev` profile
+- [x] Create `petclinic.http` in the project root with requests for all 14 REST endpoints
+- [x] Use sample data IDs and payloads matching the H2 seed data
+- [x] Organize requests by domain (Owners, Pets, Visits, Vets) with clear comments
+- [x] Verify: every request in the file runs successfully against a fresh local `dev` profile
 
 ---
 
