@@ -8,7 +8,7 @@
 | Framework | Spring Boot | 4.0.3                                    |
 | Template Engine | Thymeleaf | (managed by Spring Boot)                 |
 | Persistence | Spring Data JPA | (migrating to Spring Data JDBC)         |
-| Databases | H2 (dev), MySQL, PostgreSQL | H2 in-memory; PostgreSQL 18.3 (removing MySQL) |
+| Databases | H2 (dev), PostgreSQL | H2 in-memory; PostgreSQL 18.3
 | Cache | Caffeine + Spring Cache | (managed by Spring Boot)                 |
 | Validation | Bean Validation (Hibernate Validator) | (managed by Spring Boot)                 |
 | Monitoring | Spring Boot Actuator | (managed by Spring Boot)                 |
@@ -36,7 +36,7 @@
 
 - **API-first**: REST endpoints are built before the Vue.js frontend so the API is the single source of truth.
 - **Thymeleaf retained**: Existing Thymeleaf views remain functional during the transition; Vue.js views replace them incrementally.
-- **H2 for dev**: In-memory H2 stays the default for rapid local development; PostgreSQL is the sole production database (MySQL removed).
+- **H2 for dev**: In-memory H2 stays the default for rapid local development; PostgreSQL is the sole production database.
 - **Kotlin migration**: Java code migrates to Kotlin incrementally (models first, then repos/services, then controllers/config).
 - **Spring Data JDBC over JPA**: Migrating from Spring Data JPA to Spring Data JDBC for explicit SQL and better control.
 - **Gradle only**: Gradle is the sole build tool; Maven has been removed.

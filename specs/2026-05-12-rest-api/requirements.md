@@ -34,6 +34,6 @@ Expose the existing domain (Owners, Pets, Visits, Vets, Specialties) as JSON RES
 - The project uses Spring Boot 4.0.3 with Spring Data JPA. Each domain (Owner, Pet, Visit, Vet, Specialty) has a corresponding entity and repository.
 - The existing `@Controller` classes serve Thymeleaf templates. They must continue to work alongside the new REST controllers.
 - Bean Validation (Hibernate Validator) is already on the classpath and used in entity and form validation. DTOs should also use Bean Validation annotations.
-- H2 is the default dev database; MySQL and PostgreSQL profiles exist. Integration tests should use the default H2 profile.
+- H2 is the default dev database; PostgreSQL profile exists. Integration tests should use the default H2 profile.
 - Spring Boot Actuator is already configured; new REST endpoints should not conflict with Actuator paths.
 - The build uses Maven (primary). MapStruct requires the `maven-compiler-plugin` annotation processor configuration.

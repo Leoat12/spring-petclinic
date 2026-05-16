@@ -49,4 +49,4 @@ curl -s -X POST http://localhost:8080/api/v1/owners \
 - Existing Thymeleaf `@Controller` routes (`/owners`, `/vets`, etc.) must continue to serve HTML pages unchanged
 - Existing Thymeleaf integration tests must continue to pass
 - No changes to entity classes or repository interfaces should break existing service-layer behavior
-- H2, MySQL, and PostgreSQL database profiles must all still work
+- H2 and PostgreSQL database profiles must both still work

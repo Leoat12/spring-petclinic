@@ -31,6 +31,6 @@
 - **Java 21**, **Spring Boot 4.0.3**, **Maven** (primary build tool)
 - The project already has Checkstyle and JaCoCo plugins configured
 - The project uses Spring Boot's built-in `build-image` goal for container builds today — this phase introduces an explicit `Dockerfile` for more reproducibility and control
-- H2 is the dev database; MySQL and PostgreSQL profiles exist for integration testing
+- H2 is the dev database; PostgreSQL profile exists for integration testing
 - This is a learning/portfolio project — the Dockerfile and CI pipeline should be clear and well-commented so others can learn from them
 - The existing Thymeleaf UI must continue to work unchanged after these infrastructure changes

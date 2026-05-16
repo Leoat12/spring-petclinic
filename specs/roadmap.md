@@ -43,12 +43,12 @@ Remove Maven support; standardize on Gradle as the sole build tool.
 
 Remove MySQL compatibility; PostgreSQL becomes the sole production database. H2 stays for local development speed.
 
-- [ ] Remove MySQL driver dependency and profile-specific configuration
-- [ ] Remove MySQL-specific schema and data scripts
-- [ ] Update Testcontainers integration tests to use PostgreSQL only
-- [ ] Keep H2 as the default `dev` profile for fast local development
-- [ ] Update documentation to reflect PostgreSQL as the sole production database
-- [ ] Verify: application starts and all tests pass with H2 (dev) and PostgreSQL (CI/Testcontainers) only; no MySQL artifacts remain
+- [x] Remove MySQL driver dependency and profile-specific configuration
+- [x] Remove MySQL-specific schema and data scripts
+- [x] Update Testcontainers integration tests to use PostgreSQL only
+- [x] Keep H2 as the default `dev` profile for fast local development
+- [x] Update documentation to reflect PostgreSQL as the sole production database
+- [x] Verify: application starts and all tests pass with H2 (dev) and PostgreSQL (CI/Testcontainers) only; no MySQL artifacts remain
 
 ---
 
