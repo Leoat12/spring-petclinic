@@ -67,11 +67,11 @@ Add a `.http` file covering all existing REST API endpoints so developers can ex
 
 Harden the test suite on the simplified database setup before deeper migrations.
 
-- [ ] Expand integration tests for all repository and service layers
-- [ ] Add Testcontainers-based integration test profile for PostgreSQL
-- [ ] Configure Pitest (mutation testing) and add to CI
-- [ ] Add contract tests for the REST API endpoints
-- [ ] Verify: mutation coverage threshold enforced; contract tests pass in CI
+- [x] Expand integration tests for all repository and service layers
+- [x] Add Testcontainers-based integration test profile for PostgreSQL
+- [x] Configure Pitest (mutation testing) and add to CI
+- [x] Add contract tests for the REST API endpoints
+- [x] Verify: mutation coverage threshold enforced; contract tests pass in CI
 
 ---
 

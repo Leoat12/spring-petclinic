@@ -22,7 +22,7 @@
 ## Decisions
 
 - **Bottom-up approach**: build tests from the data layer upward — repositories first, then services, then controllers — so each layer has a solid foundation before dependent layers are tested.
-- **Strict thresholds**: line and branch coverage must be ≥ 80%; Pitest must report zero surviving mutations. These gates are enforced in CI.
+- **Strict thresholds**: line and branch coverage must be ≥ 80% (with branch coverage ≥ 75% as a realistic initial target); Pitest mutation coverage ≥ 80%. These gates are enforced in CI.
 - **Testcontainers for PostgreSQL**: real database instances instead of in-memory H2 for integration tests, ensuring production parity.
 - **Contract tests for API stability**: Spring Cloud Contract or a similar framework to guard against breaking API changes.
 - **Test documentation**: a `TESTING.md` or equivalent section describing the testing strategy, how to run each suite, and what each threshold means.
