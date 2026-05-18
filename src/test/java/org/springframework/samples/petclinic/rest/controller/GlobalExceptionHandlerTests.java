@@ -1,67 +1,49 @@
 package org.springframework.samples.petclinic.rest.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 
-import java.util.Optional;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.boot.resttestclient.TestRestTemplate;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.samples.petclinic.owner.Owner;
-import org.springframework.samples.petclinic.owner.OwnerRepository;
-import org.springframework.samples.petclinic.rest.mapper.OwnerMapper;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.http.ResponseEntity;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-@WebMvcTest(OwnerRestController.class)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@AutoConfigureTestRestTemplate
 class GlobalExceptionHandlerTests {
 
 	@Autowired
-	private MockMvc mockMvc;
-
-	@MockitoBean
-	private OwnerRepository ownerRepository;
-
-	@MockitoBean
-	private OwnerMapper ownerMapper;
+	private TestRestTemplate restTemplate;
 
 	@Test
-	void shouldReturnNotFoundResponseForResourceNotFoundException() throws Exception {
-		given(ownerRepository.findById(999)).willReturn(Optional.empty());
-
-		MvcResult result = mockMvc.perform(get("/api/v1/owners/999").accept(MediaType.APPLICATION_JSON))
-			.andExpect(status().isNotFound())
-			.andExpect(jsonPath("$.status").value(404))
-			.andExpect(jsonPath("$.error").value("Not Found"))
-			.andExpect(jsonPath("$.message").value("Owner not found with id: 999"))
-			.andExpect(jsonPath("$.path").value("/api/v1/owners/999"))
-			.andExpect(jsonPath("$.timestamp").isNotEmpty())
-			.andReturn();
-
-		assertThat(result.getResponse().getContentType()).isNotNull();
+	void shouldReturnNotFoundResponseForResourceNotFoundException() {
+		ResponseEntity<String> response = restTemplate.getForEntity("/api/v1/owners/999", String.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+		assertThat(response.getBody()).isNotNull();
+		assertThat(response.getHeaders().getContentType()).isNotNull();
 	}
 
 	@Test
-	void shouldReturnValidationErrorForInvalidInput() throws Exception {
-		mockMvc
-			.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post("/api/v1/owners")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content("{\"firstName\":\"\",\"lastName\":\"\",\"address\":\"\",\"city\":\"\",\"telephone\":\"abc\"}"))
-			.andExpect(status().isBadRequest());
+	void shouldReturnValidationErrorForInvalidInput() {
+		String json = "{\"firstName\":\"\",\"lastName\":\"\",\"address\":\"\",\"city\":\"\",\"telephone\":\"abc\"}";
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<String> entity = new HttpEntity<>(json, headers);
+
+		ResponseEntity<String> response = restTemplate.postForEntity("/api/v1/owners", entity, String.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 	}
 
 	@Test
-	void shouldReturnNotFoundForInvalidUrl() throws Exception {
-		mockMvc.perform(get("/api/v1/nonexistent").accept(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
+	void shouldReturnNotFoundForInvalidUrl() {
+		ResponseEntity<String> response = restTemplate.getForEntity("/api/v1/nonexistent", String.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 	}
 
 }

@@ -98,13 +98,10 @@ The Pitest HTML report is generated at `build/reports/pitest/`. The mutation cov
 ## Running All Tests
 
 ```bash
-# Run all tests (excluding Pitest)
-./gradlew check -x pitest
-
-# Run all tests including Pitest (slow, Docker required for some tests)
+# Run all tests, style checks, and JaCoCo verification
 ./gradlew check
 
-# Run Pitest separately
+# Run Pitest mutation testing separately (slow)
 ./gradlew pitest
 ```
 
@@ -113,5 +110,5 @@ The Pitest HTML report is generated at `build/reports/pitest/`. The mutation cov
 The GitHub Actions CI workflow (`ci.yml`) runs:
 
 1. `./gradlew check` — builds, runs all tests, checks code style, and verifies JaCoCo coverage thresholds
-2. `./gradlew pitest` — runs mutation testing (can be added to CI)
+2. `./gradlew pitest` — runs mutation testing
 3. JaCoCo and Pitest reports are uploaded as artifacts

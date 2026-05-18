@@ -14,7 +14,7 @@
 
 ```bash
 # Full build with all gates
-./gradlew check -x pitest
+./gradlew check
 
 # Run Testcontainers-based PostgreSQL tests (requires Docker)
 ./gradlew test --tests "org.springframework.samples.petclinic.PostgresIntegrationTests"
