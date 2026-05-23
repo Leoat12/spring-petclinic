@@ -24,17 +24,21 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.boot.data.jdbc.test.autoconfigure.DataJdbcTest;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase.Replace;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.samples.petclinic.owner.JdbcClientOwnerRepository;
+import org.springframework.samples.petclinic.owner.JdbcClientPetTypeRepository;
 import org.springframework.samples.petclinic.owner.Owner;
 import org.springframework.samples.petclinic.owner.OwnerRepository;
 import org.springframework.samples.petclinic.owner.Pet;
 import org.springframework.samples.petclinic.owner.PetType;
 import org.springframework.samples.petclinic.owner.PetTypeRepository;
 import org.springframework.samples.petclinic.owner.Visit;
+import org.springframework.samples.petclinic.vet.JdbcClientVetRepository;
 import org.springframework.samples.petclinic.vet.Vet;
 import org.springframework.samples.petclinic.vet.VetRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,8 +71,9 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Michael Isvy
  * @author Dave Syer
  */
-@DataJpaTest
+@DataJdbcTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
+@Import({ JdbcClientOwnerRepository.class, JdbcClientPetTypeRepository.class, JdbcClientVetRepository.class })
 // @TestPropertySource("/application-postgres.properties")
 class ClinicServiceTests {
 

@@ -15,8 +15,6 @@
  */
 package org.springframework.samples.petclinic.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.NotBlank;
 
 /**
@@ -24,14 +22,11 @@ import jakarta.validation.constraints.NotBlank;
  *
  * @author Ken Krebs
  */
-@MappedSuperclass
 public class Person extends BaseEntity {
 
-	@Column
 	@NotBlank
 	private String firstName;
 
-	@Column
 	@NotBlank
 	private String lastName;
 

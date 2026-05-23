@@ -23,16 +23,6 @@ import java.util.Set;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.petclinic.model.NamedEntity;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OrderBy;
-import jakarta.persistence.Table;
-
 /**
  * Simple business object representing a pet.
  *
@@ -41,21 +31,15 @@ import jakarta.persistence.Table;
  * @author Sam Brannen
  * @author Wick Dynex
  */
-@Entity
-@Table(name = "pets")
 public class Pet extends NamedEntity {
 
-	@Column
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate birthDate;
 
-	@ManyToOne
-	@JoinColumn(name = "type_id")
+	private Integer typeId;
+
 	private PetType type;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "pet_id")
-	@OrderBy("date ASC")
 	private final Set<Visit> visits = new LinkedHashSet<>();
 
 	public void setBirthDate(LocalDate birthDate) {
@@ -66,12 +50,23 @@ public class Pet extends NamedEntity {
 		return this.birthDate;
 	}
 
+	public Integer getTypeId() {
+		return this.typeId;
+	}
+
+	public void setTypeId(Integer typeId) {
+		this.typeId = typeId;
+	}
+
 	public PetType getType() {
 		return this.type;
 	}
 
 	public void setType(PetType type) {
 		this.type = type;
+		if (type != null) {
+			this.typeId = type.getId();
+		}
 	}
 
 	public Collection<Visit> getVisits() {

@@ -79,12 +79,12 @@ Harden the test suite on the simplified database setup before deeper migrations.
 
 Replace Spring Data JPA with Spring Data JDBC for explicit SQL queries and better control.
 
-- [ ] Add Spring Data JDBC dependency; remove Spring Data JPA dependency
-- [ ] Migrate each entity to Spring Data JDBC `@Table`/`@Id` conventions (no JPA annotations)
-- [ ] Replace JPA repositories with `JdbcClient`-based or `CrudRepository` implementations using explicit SQL
-- [ ] Write and verify SQL migrations for PostgreSQL and H2 compatibility
-- [ ] Update all service and controller layers for the new repository interfaces
-- [ ] Verify: all existing integration and contract tests pass with JDBC repositories; no JPA artifacts remain
+- [x] Add Spring Data JDBC dependency; remove Spring Data JPA dependency
+- [x] Migrate each entity to Spring Data JDBC `@Table`/`@Id` conventions (no JPA annotations)
+- [x] Replace JPA repositories with `JdbcClient`-based or `CrudRepository` implementations using explicit SQL
+- [x] Write and verify SQL migrations for PostgreSQL and H2 compatibility
+- [x] Update all service and controller layers for the new repository interfaces
+- [x] Verify: all existing integration and contract tests pass with JDBC repositories; no JPA artifacts remain
 
 ---
 

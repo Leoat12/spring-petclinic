@@ -13,20 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.springframework.samples.petclinic.owner;
+package org.springframework.samples.petclinic.vet;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface PetTypeRepository {
+public interface SpecialtyRepository {
 
-	List<PetType> findPetTypes();
+	List<Specialty> findAll();
 
-	Optional<PetType> findById(Integer id);
-
-	PetType save(PetType petType);
-
-	void deleteById(Integer id);
+	Optional<Specialty> findById(Integer id);
 
 }

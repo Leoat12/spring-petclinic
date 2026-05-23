@@ -7,16 +7,18 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.boot.data.jdbc.test.autoconfigure.DataJdbcTest;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase.Replace;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.samples.petclinic.service.EntityUtils;
 import org.springframework.transaction.annotation.Transactional;
 
-@DataJpaTest
+@DataJdbcTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
+@Import(JdbcClientVetRepository.class)
 class VetRepositoryTests {
 
 	@Autowired
