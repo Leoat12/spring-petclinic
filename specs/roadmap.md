@@ -88,7 +88,20 @@ Replace Spring Data JPA with Spring Data JDBC for explicit SQL queries and bette
 
 ---
 
-## Phase 7 — Kotlin Migration: Setup & Models
+## Phase 7 — Fix Mutation Testing Coverage
+
+Raise Pitest mutation score from 70% to meet the 80% threshold before proceeding with further migrations.
+
+- [ ] Analyze Pitest report to identify surviving mutations across all modules
+- [ ] Add or improve unit tests to kill surviving mutations in service and repository layers
+- [ ] Add or improve unit tests to kill surviving mutations in controller layers
+- [ ] Add or improve unit tests to kill surviving mutations in utility and configuration classes
+- [ ] Re-run Pitest and verify mutation score is at or above the 80% threshold
+- [ ] Verify: `./gradlew pitest` passes with mutation score ≥ 80; CI pipeline green
+
+---
+
+## Phase 8 — Kotlin Migration: Setup & Models
 
 Add Kotlin support to the project and migrate the domain model layer.
 
@@ -99,7 +112,7 @@ Add Kotlin support to the project and migrate the domain model layer.
 
 ---
 
-## Phase 8 — Owner Email Feature
+## Phase 9 — Owner Email Feature
 
 First feature from TODO.md. Built on the new Kotlin models + Spring Data JDBC foundation.
 
@@ -111,7 +124,7 @@ First feature from TODO.md. Built on the new Kotlin models + Spring Data JDBC fo
 
 ---
 
-## Phase 9 — Kotlin Migration: Repositories & Services
+## Phase 10 — Kotlin Migration: Repositories & Services
 
 Migrate repository and service layers to Kotlin.
 
@@ -121,7 +134,7 @@ Migrate repository and service layers to Kotlin.
 
 ---
 
-## Phase 10 — Feedback Form Feature
+## Phase 11 — Feedback Form Feature
 
 Second feature from TODO.md. Exercises the full Kotlin + JDBC stack.
 
@@ -134,7 +147,7 @@ Second feature from TODO.md. Exercises the full Kotlin + JDBC stack.
 
 ---
 
-## Phase 11 — Kotlin Migration: Controllers & Configuration
+## Phase 12 — Kotlin Migration: Controllers & Configuration
 
 Migrate controllers and configuration to Kotlin; complete the language migration.
 
@@ -145,7 +158,7 @@ Migrate controllers and configuration to Kotlin; complete the language migration
 
 ---
 
-## Phase 12 — Vue.js Frontend (Initial Scaffold)
+## Phase 13 — Vue.js Frontend (Initial Scaffold)
 
 Introduce Vue.js to replace Thymeleaf views incrementally.
 
@@ -157,7 +170,7 @@ Introduce Vue.js to replace Thymeleaf views incrementally.
 
 ---
 
-## Phase 13 — Vue.js Owners Pages
+## Phase 14 — Vue.js Owners Pages
 
 Migrate the Owners domain from Thymeleaf to Vue.js.
 
@@ -169,7 +182,7 @@ Migrate the Owners domain from Thymeleaf to Vue.js.
 
 ---
 
-## Phase 14 — Vue.js Vets Page
+## Phase 15 — Vue.js Vets Page
 
 Migrate the Vets domain from Thymeleaf to Vue.js.
 
@@ -179,7 +192,7 @@ Migrate the Vets domain from Thymeleaf to Vue.js.
 
 ---
 
-## Phase 15 — Vue.js Pet and Visit Pages
+## Phase 16 — Vue.js Pet and Visit Pages
 
 Migrate Pet and Visit management from Thymeleaf to Vue.js.
 
@@ -190,7 +203,7 @@ Migrate Pet and Visit management from Thymeleaf to Vue.js.
 
 ---
 
-## Phase 16 — Vue.js Feedback Page
+## Phase 17 — Vue.js Feedback Page
 
 Migrate the Feedback form from Thymeleaf to Vue.js.
 
@@ -200,7 +213,7 @@ Migrate the Feedback form from Thymeleaf to Vue.js.
 
 ---
 
-## Phase 17 — Remove Thymeleaf
+## Phase 18 — Remove Thymeleaf
 
 Once all views have been migrated, clean up the server-rendered layer.
 
