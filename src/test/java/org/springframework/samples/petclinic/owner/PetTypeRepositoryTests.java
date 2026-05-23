@@ -57,7 +57,8 @@ class PetTypeRepositoryTests {
 	void shouldInsertPetType() {
 		PetType petType = new PetType();
 		petType.setName("hamster");
-		petTypes.save(petType);
+		PetType saved = petTypes.save(petType);
+		assertThat(saved).isNotNull();
 		assertThat(petType.getId()).isNotNull();
 
 		Collection<PetType> types = petTypes.findPetTypes();

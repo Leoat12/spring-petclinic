@@ -114,4 +114,15 @@ class PetValidatorTests {
 
 	}
 
+	@Test
+	void shouldSupportPetClass() {
+		assertTrue(petValidator.supports(Pet.class));
+	}
+
+	@Test
+	void shouldNotSupportNonPetClass() {
+		assertFalse(petValidator.supports(Object.class));
+		assertFalse(petValidator.supports(String.class));
+	}
+
 }

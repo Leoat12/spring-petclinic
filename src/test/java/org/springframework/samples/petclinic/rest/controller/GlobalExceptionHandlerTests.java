@@ -38,6 +38,8 @@ class GlobalExceptionHandlerTests {
 
 		ResponseEntity<String> response = restTemplate.postForEntity("/api/v1/owners", entity, String.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+		assertThat(response.getBody()).isNotBlank();
+		assertThat(response.getBody()).contains("firstName");
 	}
 
 	@Test

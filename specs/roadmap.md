@@ -92,12 +92,12 @@ Replace Spring Data JPA with Spring Data JDBC for explicit SQL queries and bette
 
 Raise Pitest mutation score from 70% to meet the 80% threshold before proceeding with further migrations.
 
-- [ ] Analyze Pitest report to identify surviving mutations across all modules
-- [ ] Add or improve unit tests to kill surviving mutations in service and repository layers
-- [ ] Add or improve unit tests to kill surviving mutations in controller layers
-- [ ] Add or improve unit tests to kill surviving mutations in utility and configuration classes
-- [ ] Re-run Pitest and verify mutation score is at or above the 80% threshold
-- [ ] Verify: `./gradlew pitest` passes with mutation score ≥ 80; CI pipeline green
+- [x] Analyze Pitest report to identify surviving mutations across all modules
+- [x] Add or improve unit tests to kill surviving mutations in service and repository layers
+- [x] Add or improve unit tests to kill surviving mutations in controller layers
+- [x] Add or improve unit tests to kill surviving mutations in utility and configuration classes
+- [x] Re-run Pitest and verify mutation score is at or above the 80% threshold
+- [x] Verify: `./gradlew pitest` passes with mutation score ≥ 80; CI pipeline green
 
 ---
 

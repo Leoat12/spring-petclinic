@@ -91,4 +91,13 @@ class VisitControllerTests {
 			.andExpect(view().name("pets/createOrUpdateVisitForm"));
 	}
 
+	@Test
+	void shouldAddVisitToPetInModelAttribute() throws Exception {
+		mockMvc.perform(get("/owners/{ownerId}/pets/{petId}/visits/new", TEST_OWNER_ID, TEST_PET_ID))
+			.andExpect(status().isOk())
+			.andExpect(model().attributeExists("visit"))
+			.andExpect(model().attributeExists("pet"))
+			.andExpect(model().attributeExists("owner"));
+	}
+
 }

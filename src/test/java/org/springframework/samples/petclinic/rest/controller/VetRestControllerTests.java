@@ -66,6 +66,13 @@ class VetRestControllerTests {
 	}
 
 	@Test
+	void listVetsWithCustomPageSize() throws Exception {
+		mockMvc.perform(get("/api/v1/vets").param("page", "1").param("size", "5").accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.content").isArray());
+	}
+
+	@Test
 	void getVet() throws Exception {
 		mockMvc.perform(get("/api/v1/vets/{vetId}", 1).accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())

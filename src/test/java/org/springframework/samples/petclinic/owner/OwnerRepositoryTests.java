@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -181,6 +182,282 @@ class OwnerRepositoryTests {
 		owners.save(owner6);
 
 		assertThat(pet7.getVisits()).hasSize(found + 1).allMatch(v -> v.getId() != null);
+	}
+
+	@Test
+	void shouldLoadOwnerWithPetAndVisitDetails() {
+		Optional<Owner> optionalOwner = owners.findById(6);
+		assertThat(optionalOwner).isPresent();
+		Owner owner = optionalOwner.get();
+
+		List<Pet> pets = owner.getPets();
+		assertThat(pets).isNotEmpty();
+
+		Pet pet = pets.get(0);
+		assertThat(pet.getId()).isNotNull();
+		assertThat(pet.getName()).isNotNull();
+		assertThat(pet.getBirthDate()).isNotNull();
+		assertThat(pet.getType()).isNotNull();
+		assertThat(pet.getType().getId()).isNotNull();
+		assertThat(pet.getType().getName()).isNotNull();
+	}
+
+	@Test
+	void shouldLoadPetDetailsForOwnersViaFindByLastName() {
+		Page<Owner> results = owners.findByLastNameStartingWith("Coleman", pageable);
+		assertThat(results.getContent()).hasSize(1);
+		Owner owner = results.getContent().get(0);
+		assertThat(owner.getPets()).isNotEmpty();
+		for (Pet pet : owner.getPets()) {
+			assertThat(pet.getId()).isNotNull();
+			assertThat(pet.getName()).isNotNull();
+			assertThat(pet.getBirthDate()).isNotNull();
+			assertThat(pet.getType()).isNotNull();
+			assertThat(pet.getType().getId()).isNotNull();
+		}
+	}
+
+	@Test
+	void shouldLoadVisitDetailsForOwner() {
+		Optional<Owner> optionalOwner = owners.findById(6);
+		assertThat(optionalOwner).isPresent();
+		Owner owner = optionalOwner.get();
+
+		Pet pet7 = owner.getPet(7);
+		assertThat(pet7).isNotNull();
+		assertThat(pet7.getVisits()).isNotEmpty();
+		Visit visit = pet7.getVisits().iterator().next();
+		assertThat(visit.getId()).isNotNull();
+		assertThat(visit.getDate()).isNotNull();
+		assertThat(visit.getDescription()).isNotNull();
+	}
+
+	@Test
+	void shouldLoadPetTypesForOwnersViaFindByLastName() {
+		Page<Owner> results = owners.findByLastNameStartingWith("", pageable);
+		assertThat(results.getContent()).isNotEmpty();
+		for (Owner owner : results.getContent()) {
+			for (Pet pet : owner.getPets()) {
+				assertThat(pet.getType()).isNotNull();
+				assertThat(pet.getType().getName()).isNotNull();
+				assertThat(pet.getName()).isNotNull();
+				assertThat(pet.getBirthDate()).isNotNull();
+			}
+		}
+	}
+
+	@Test
+	void shouldLoadVisitDetailsForOwnersViaFindByLastName() {
+		Page<Owner> results = owners.findByLastNameStartingWith("", pageable);
+		assertThat(results.getContent()).isNotEmpty();
+		boolean hasVisits = false;
+		for (Owner owner : results.getContent()) {
+			for (Pet pet : owner.getPets()) {
+				assertThat(pet.getId()).isNotNull();
+				for (Visit visit : pet.getVisits()) {
+					assertThat(visit.getId()).isNotNull();
+					assertThat(visit.getDate()).isNotNull();
+					assertThat(visit.getDescription()).isNotNull();
+					hasVisits = true;
+				}
+			}
+		}
+		assertThat(hasVisits).isTrue();
+	}
+
+	@Test
+	void shouldLoadVisitDetailsForOwnerViaFindById() {
+		Optional<Owner> optionalOwner = owners.findById(6);
+		assertThat(optionalOwner).isPresent();
+		Owner owner = optionalOwner.get();
+		Pet pet7 = owner.getPet(7);
+		assertThat(pet7).isNotNull();
+		boolean foundVisitWithDetails = false;
+		for (Visit visit : pet7.getVisits()) {
+			assertThat(visit.getId()).isNotNull();
+			assertThat(visit.getDate()).isNotNull();
+			assertThat(visit.getDescription()).isNotNull();
+			foundVisitWithDetails = true;
+		}
+		assertThat(foundVisitWithDetails).isTrue();
+	}
+
+	@Test
+	@Transactional
+	void shouldDeleteOwnerCascadesVisitsAndPets() {
+		Owner owner = new Owner();
+		owner.setFirstName("Cascade");
+		owner.setLastName("Test");
+		owner.setAddress("123 St");
+		owner.setCity("City");
+		owner.setTelephone("1234567890");
+		owners.save(owner);
+		Integer id = owner.getId();
+
+		Collection<PetType> types = owners.findAll(pageable)
+			.getContent()
+			.stream()
+			.flatMap(o -> o.getPets().stream())
+			.map(Pet::getType)
+			.distinct()
+			.toList();
+		PetType petType = EntityUtils.getById(types.stream().toList(), PetType.class, 1);
+
+		Pet pet = new Pet();
+		pet.setName("cascade_pet");
+		pet.setBirthDate(LocalDate.now());
+		pet.setType(petType);
+		owner.addPet(pet);
+		owners.save(owner);
+
+		Visit visit = new Visit();
+		visit.setDescription("cascade_visit");
+		owner.addVisit(pet.getId(), visit);
+		owners.save(owner);
+
+		owners.deleteById(id);
+		assertThat(owners.existsById(id)).isFalse();
+	}
+
+	@Test
+	@Transactional
+	void shouldSaveNewPetWithTypeAndIdSet() {
+		Optional<Owner> optionalOwner = owners.findById(6);
+		assertThat(optionalOwner).isPresent();
+		Owner owner = optionalOwner.get();
+
+		Collection<PetType> types = owners.findAll(pageable)
+			.getContent()
+			.stream()
+			.flatMap(o -> o.getPets().stream())
+			.map(Pet::getType)
+			.distinct()
+			.toList();
+		PetType petType = EntityUtils.getById(types.stream().toList(), PetType.class, 2);
+
+		Pet newPet = new Pet();
+		newPet.setName("new_test_pet");
+		newPet.setBirthDate(LocalDate.now());
+		newPet.setType(petType);
+		owner.addPet(newPet);
+		owners.save(owner);
+
+		Optional<Owner> reloaded = owners.findById(6);
+		assertThat(reloaded).isPresent();
+		Pet savedPet = reloaded.get().getPet("new_test_pet");
+		assertThat(savedPet).isNotNull();
+		assertThat(savedPet.getId()).isNotNull();
+		assertThat(savedPet.getTypeId()).isNotNull();
+	}
+
+	@Test
+	@Transactional
+	void shouldUpdateExistingPetFields() {
+		Optional<Owner> optionalOwner = owners.findById(6);
+		assertThat(optionalOwner).isPresent();
+		Owner owner = optionalOwner.get();
+
+		Pet pet7 = owner.getPet(7);
+		assertThat(pet7).isNotNull();
+		String originalName = pet7.getName();
+
+		Collection<PetType> types = owners.findAll(pageable)
+			.getContent()
+			.stream()
+			.flatMap(o -> o.getPets().stream())
+			.map(Pet::getType)
+			.distinct()
+			.toList();
+		PetType newType = EntityUtils.getById(types.stream().toList(), PetType.class, 1);
+		pet7.setName(originalName + "_updated");
+		pet7.setType(newType);
+		owners.save(owner);
+
+		Optional<Owner> reloaded = owners.findById(6);
+		assertThat(reloaded).isPresent();
+		Pet updatedPet = reloaded.get().getPet(originalName + "_updated");
+		assertThat(updatedPet).isNotNull();
+		assertThat(updatedPet.getTypeId()).isEqualTo(newType.getId());
+	}
+
+	@Test
+	@Transactional
+	void shouldSaveVisitWithDateAndDescription() {
+		Optional<Owner> optionalOwner = owners.findById(6);
+		assertThat(optionalOwner).isPresent();
+		Owner owner = optionalOwner.get();
+
+		Pet pet7 = owner.getPet(7);
+		LocalDate visitDate = LocalDate.of(2024, 6, 15);
+		Visit visit = new Visit();
+		visit.setDate(visitDate);
+		visit.setDescription("annual checkup");
+		owner.addVisit(pet7.getId(), visit);
+		owners.save(owner);
+
+		Optional<Owner> reloaded = owners.findById(6);
+		assertThat(reloaded).isPresent();
+		Pet reloadedPet = reloaded.get().getPet(7);
+		boolean found = false;
+		for (Visit v : reloadedPet.getVisits()) {
+			if (v.getDescription().equals("annual checkup")) {
+				assertThat(v.getDate()).isEqualTo(visitDate);
+				assertThat(v.getId()).isNotNull();
+				found = true;
+			}
+		}
+		assertThat(found).isTrue();
+	}
+
+	@Test
+	@Transactional
+	void shouldRemovePetFromOwner() {
+		Optional<Owner> optionalOwner = owners.findById(6);
+		assertThat(optionalOwner).isPresent();
+		Owner owner = optionalOwner.get();
+		int initialPetCount = owner.getPets().size();
+		assertThat(initialPetCount).isGreaterThan(0);
+
+		Pet petToRemove = owner.getPets().get(0);
+		owner.getPets().remove(petToRemove);
+		owners.save(owner);
+
+		Optional<Owner> reloaded = owners.findById(6);
+		assertThat(reloaded).isPresent();
+		assertThat(reloaded.get().getPets()).hasSize(initialPetCount - 1);
+	}
+
+	@Test
+	void shouldLoadAllOwnersWithPetDetails() {
+		Collection<Owner> allOwners = owners.findAll();
+		assertThat(allOwners).isNotEmpty();
+		for (Owner owner : allOwners) {
+			for (Pet pet : owner.getPets()) {
+				assertThat(pet.getId()).isNotNull();
+				assertThat(pet.getName()).isNotNull();
+				assertThat(pet.getBirthDate()).isNotNull();
+				assertThat(pet.getType()).isNotNull();
+				assertThat(pet.getType().getName()).isNotNull();
+			}
+		}
+	}
+
+	@Test
+	void shouldLoadAllOwnersWithVisitDetails() {
+		Collection<Owner> allOwners = owners.findAll();
+		assertThat(allOwners).isNotEmpty();
+		boolean hasVisits = false;
+		for (Owner owner : allOwners) {
+			for (Pet pet : owner.getPets()) {
+				for (Visit visit : pet.getVisits()) {
+					assertThat(visit.getId()).isNotNull();
+					assertThat(visit.getDate()).isNotNull();
+					assertThat(visit.getDescription()).isNotNull();
+					hasVisits = true;
+				}
+			}
+		}
+		assertThat(hasVisits).isTrue();
 	}
 
 }

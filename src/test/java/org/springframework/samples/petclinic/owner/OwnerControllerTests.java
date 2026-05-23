@@ -248,4 +248,34 @@ class OwnerControllerTests {
 			.andExpect(flash().attributeExists("error"));
 	}
 
+	@Test
+	void shouldFindOwnerByLastNameStartingWithLoadsPetsAndVisits() throws Exception {
+		Page<Owner> results = new PageImpl<>(List.of(george()));
+		when(owners.findByLastNameStartingWith(eq("Franklin"), any(Pageable.class))).thenReturn(results);
+		mockMvc.perform(get("/owners?page=1").param("lastName", "Franklin")).andExpect(status().is3xxRedirection());
+	}
+
+	@Test
+	void processUpdateOwnerFormWithIdMismatchShowsError() throws Exception {
+		Owner mismatchOwner = new Owner();
+		mismatchOwner.setId(2);
+		mismatchOwner.setFirstName("John");
+		mismatchOwner.setLastName("Doe");
+		mismatchOwner.setAddress("123 Street");
+		mismatchOwner.setCity("City");
+		mismatchOwner.setTelephone("0123456789");
+
+		when(owners.findById(1)).thenReturn(Optional.of(mismatchOwner));
+
+		mockMvc
+			.perform(post("/owners/1/edit").flashAttr("owner", mismatchOwner)
+				.param("firstName", "John")
+				.param("lastName", "Doe")
+				.param("address", "123 Street")
+				.param("city", "City")
+				.param("telephone", "0123456789"))
+			.andExpect(status().is3xxRedirection())
+			.andExpect(redirectedUrl("/owners/1/edit"));
+	}
+
 }

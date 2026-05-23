@@ -146,6 +146,23 @@ class PetRestControllerTests {
 	}
 
 	@Test
+	void updatePetChangesFields() throws Exception {
+		PetType newType = new PetType();
+		newType.setId(1);
+		newType.setName("dog");
+		given(petTypeRepository.findById(1)).willReturn(Optional.of(newType));
+
+		mockMvc
+			.perform(put("/api/v1/owners/{ownerId}/pets/{petId}", TEST_OWNER_ID, TEST_PET_ID)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("""
+						{"name":"Max Updated","birthDate":"2021-06-15","typeId":1}"""))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.name").value("Max Updated"))
+			.andExpect(jsonPath("$.birthDate").value("2021-06-15"));
+	}
+
+	@Test
 	void deletePet() throws Exception {
 		mockMvc.perform(delete("/api/v1/owners/{ownerId}/pets/{petId}", TEST_OWNER_ID, TEST_PET_ID))
 			.andExpect(status().isNoContent());

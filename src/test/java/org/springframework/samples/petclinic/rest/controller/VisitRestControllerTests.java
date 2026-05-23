@@ -112,7 +112,23 @@ class VisitRestControllerTests {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("""
 						{"date":"2024-03-01","description":"checkup"}"""))
-			.andExpect(status().isCreated());
+			.andExpect(status().isCreated())
+			.andExpect(jsonPath("$.description").value("checkup"));
+	}
+
+	@Test
+	void createVisitWithNullDate() throws Exception {
+		given(visitMapper.toDto(any(Visit.class))).willAnswer(invocation -> {
+			Visit visit = invocation.getArgument(0);
+			return new VisitDto(2, visit.getDate(), visit.getDescription());
+		});
+		mockMvc
+			.perform(post("/api/v1/owners/{ownerId}/pets/{petId}/visits", TEST_OWNER_ID, TEST_PET_ID)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("""
+						{"description":"checkup no date"}"""))
+			.andExpect(status().isCreated())
+			.andExpect(jsonPath("$.description").value("checkup no date"));
 	}
 
 	@Test

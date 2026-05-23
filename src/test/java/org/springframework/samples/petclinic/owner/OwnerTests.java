@@ -131,4 +131,49 @@ class OwnerTests {
 		assertThat(owner.getTelephone()).isEqualTo("9999999999");
 	}
 
+	@Test
+	void shouldReturnStringRepresentation() {
+		owner.setFirstName("George");
+		owner.setLastName("Franklin");
+		owner.setAddress("110 W. Liberty St.");
+		owner.setCity("Madison");
+		owner.setTelephone("6085551023");
+		String result = owner.toString();
+		assertThat(result).contains("Franklin");
+		assertThat(result).contains("George");
+		assertThat(result).isNotEmpty();
+	}
+
+	@Test
+	void shouldThrowWhenAddVisitWithNullPetId() {
+		assertThatIllegalArgumentException().isThrownBy(() -> owner.addVisit(null, new Visit()))
+			.withMessageContaining("Pet identifier must not be null");
+	}
+
+	@Test
+	void shouldThrowWhenAddVisitWithNullVisit() {
+		assertThatIllegalArgumentException().isThrownBy(() -> owner.addVisit(1, null))
+			.withMessageContaining("Visit must not be null");
+	}
+
+	@Test
+	void shouldGetPetByNameIgnoringNewPets() {
+		Pet newPet = new Pet();
+		newPet.setName("NewFido");
+		newPet.setBirthDate(LocalDate.of(2023, 1, 1));
+		newPet.setType(dog);
+		owner.addPet(newPet);
+
+		Pet existingPet = new Pet();
+		existingPet.setName("OldFido");
+		existingPet.setBirthDate(LocalDate.of(2023, 1, 1));
+		existingPet.setType(dog);
+		owner.addPet(existingPet);
+		existingPet.setId(5);
+
+		assertThat(owner.getPet("NewFido", true)).isNull();
+		assertThat(owner.getPet("NewFido", false)).isNotNull();
+		assertThat(owner.getPet("OldFido", true)).isNotNull();
+	}
+
 }

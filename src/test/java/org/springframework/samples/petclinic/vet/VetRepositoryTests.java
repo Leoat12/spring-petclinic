@@ -67,4 +67,39 @@ class VetRepositoryTests {
 		assertThat(secondCall).hasSameSizeAs(firstCall);
 	}
 
+	@Test
+	void shouldFindVetByIdWithSpecialties() {
+		Optional<Vet> optionalVet = vets.findById(3);
+		assertThat(optionalVet).isPresent();
+		Vet vet = optionalVet.get();
+		assertThat(vet.getNrOfSpecialties()).isGreaterThan(0);
+		assertThat(vet.getSpecialties()).isNotEmpty();
+		assertThat(vet.getSpecialties().get(0).getName()).isNotNull();
+	}
+
+	@Test
+	void shouldLoadSpecialtiesForAllVets() {
+		Collection<Vet> allVets = vets.findAll();
+		assertThat(allVets).isNotEmpty();
+		for (Vet vet : allVets) {
+			if (vet.getId() == 3) {
+				assertThat(vet.getNrOfSpecialties()).isEqualTo(2);
+				assertThat(vet.getSpecialties().get(0).getId()).isNotNull();
+				assertThat(vet.getSpecialties().get(1).getId()).isNotNull();
+			}
+		}
+	}
+
+	@Test
+	void shouldFindVetByIdWithCorrectSpecialties() {
+		Optional<Vet> vet1 = vets.findById(1);
+		assertThat(vet1).isPresent();
+		assertThat(vet1.get().getSpecialties()).isEmpty();
+
+		Optional<Vet> vet3 = vets.findById(3);
+		assertThat(vet3).isPresent();
+		assertThat(vet3.get().getSpecialties()).isNotEmpty();
+		assertThat(vet3.get().getSpecialties().get(0).getName()).isEqualTo("dentistry");
+	}
+
 }
