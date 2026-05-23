@@ -143,6 +143,7 @@ pitest {
   mutationThreshold = 80
   coverageThreshold = 80
   timestampedReports = false
+  junit5PluginVersion = '1.2.1'
 }
 
 springBoot {
