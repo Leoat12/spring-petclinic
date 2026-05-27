@@ -105,10 +105,10 @@ Raise Pitest mutation score from 70% to meet the 80% threshold before proceeding
 
 Add Kotlin support to the project and migrate the domain model layer.
 
-- [ ] Add Kotlin plugin and dependencies to the Gradle build
-- [ ] Migrate entity/model classes (Owner, Pet, Visit, Vet, Specialty) to Kotlin data classes
-- [ ] Update Spring Data JDBC mappings for Kotlin data classes
-- [ ] Verify: application compiles and all tests pass; models are idiomatic Kotlin
+- [x] Add Kotlin plugin and dependencies to the Gradle build
+- [x] Migrate entity/model classes (Owner, Pet, Visit, Vet, Specialty) to Kotlin data classes
+- [x] Update Spring Data JDBC mappings for Kotlin data classes
+- [x] Verify: application compiles and all tests pass; models are idiomatic Kotlin
 
 ---
 
