@@ -1,5 +1,7 @@
 plugins {
   id 'java'
+  id 'org.jetbrains.kotlin.jvm' version '2.1.21'
+  id 'org.jetbrains.kotlin.plugin.spring' version '2.1.21'
   id 'checkstyle'
   id 'jacoco'
   id 'org.springframework.boot' version '4.0.3'
@@ -20,6 +22,17 @@ version = '4.0.0-SNAPSHOT'
 java {
   toolchain {
     languageVersion = JavaLanguageVersion.of(21)
+  }
+  sourceCompatibility = JavaVersion.VERSION_21
+}
+
+kotlin {
+  jvmToolchain(21)
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.dsl.KotlinCompile).configureEach {
+  kotlinOptions {
+    freeCompilerArgs = ['-Xjsr305=strict']
   }
 }
 
@@ -42,6 +55,9 @@ dependencies {
   implementation 'org.springframework.boot:spring-boot-starter-validation'
   implementation 'javax.cache:cache-api'
   implementation 'jakarta.xml.bind:jakarta.xml.bind-api'
+  implementation 'org.jetbrains.kotlin:kotlin-stdlib'
+  implementation 'org.jetbrains.kotlin:kotlin-reflect'
+  implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
   implementation "org.mapstruct:mapstruct:${mapstructVersion}"
   annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
   runtimeOnly 'org.springframework.boot:spring-boot-starter-actuator'
@@ -138,6 +154,7 @@ pitest {
   targetClasses = ['org.springframework.samples.petclinic.*']
   excludedClasses = ['org.springframework.samples.petclinic.rest.dto.*', 'org.springframework.samples.petclinic.rest.mapper.*']
   excludedTestClasses = ['org.springframework.samples.petclinic.PostgresIntegrationTests']
+  avoidCallsTo = ['kotlin.jvm.internal.Intrinsics']
   threads = 2
   outputFormats = ['HTML', 'XML']
   mutationThreshold = 80
