@@ -129,6 +129,12 @@ class OwnerTests {
 
 		owner.setTelephone("9999999999");
 		assertThat(owner.getTelephone()).isEqualTo("9999999999");
+
+		owner.setEmail("test@example.com");
+		assertThat(owner.getEmail()).isEqualTo("test@example.com");
+
+		owner.setEmail(null);
+		assertThat(owner.getEmail()).isNull();
 	}
 
 	@Test
@@ -138,9 +144,11 @@ class OwnerTests {
 		owner.setAddress("110 W. Liberty St.");
 		owner.setCity("Madison");
 		owner.setTelephone("6085551023");
+		owner.setEmail("george@franklin.com");
 		String result = owner.toString();
 		assertThat(result).contains("Franklin");
 		assertThat(result).contains("George");
+		assertThat(result).contains("george@franklin.com");
 		assertThat(result).isNotEmpty();
 	}
 

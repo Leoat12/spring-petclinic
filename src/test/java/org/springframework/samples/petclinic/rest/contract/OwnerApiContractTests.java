@@ -65,7 +65,7 @@ class OwnerApiContractTests {
 
 	@Test
 	void createOwnerReturnsCreatedWithLocation() {
-		OwnerCreateDto dto = new OwnerCreateDto("Jane", "Doe", "456 Oak Ave", "Portland", "5035551234");
+		OwnerCreateDto dto = new OwnerCreateDto("Jane", "Doe", "456 Oak Ave", "Portland", "5035551234", "jane@doe.com");
 		ResponseEntity<OwnerDto> response = restTemplate.postForEntity("/api/v1/owners", dto, OwnerDto.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 		assertThat(response.getBody()).isNotNull();
@@ -76,15 +76,34 @@ class OwnerApiContractTests {
 
 	@Test
 	void createOwnerValidatesAllFields() {
-		OwnerCreateDto blankDto = new OwnerCreateDto("", "", "", "", "short");
+		OwnerCreateDto blankDto = new OwnerCreateDto("", "", "", "", "short", "invalid");
 		ResponseEntity<String> response = restTemplate.postForEntity("/api/v1/owners", blankDto, String.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 	}
 
 	@Test
+	void createOwnerWithEmail() {
+		OwnerCreateDto dto = new OwnerCreateDto("Jane", "Doe", "456 Oak Ave", "Portland", "5035551234",
+				"jane@example.com");
+		ResponseEntity<OwnerDto> response = restTemplate.postForEntity("/api/v1/owners", dto, OwnerDto.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+		assertThat(response.getBody()).isNotNull();
+		assertThat(response.getBody().email()).isEqualTo("jane@example.com");
+	}
+
+	@Test
+	void createOwnerWithoutEmail() {
+		OwnerCreateDto dto = new OwnerCreateDto("John", "Smith", "789 Pine St", "Seattle", "2065551234", null);
+		ResponseEntity<OwnerDto> response = restTemplate.postForEntity("/api/v1/owners", dto, OwnerDto.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+		assertThat(response.getBody()).isNotNull();
+		assertThat(response.getBody().email()).isNull();
+	}
+
+	@Test
 	void updateOwnerModifiesExistingOwner() {
 		OwnerUpdateDto dto = new OwnerUpdateDto("UpdatedName", "Franklin", "110 W. Liberty St.", "Madison",
-				"6085551023");
+				"6085551023", "updated@email.com");
 		ResponseEntity<OwnerDto> response = restTemplate.exchange("/api/v1/owners/1", HttpMethod.PUT,
 				new HttpEntity<>(dto), OwnerDto.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -93,7 +112,7 @@ class OwnerApiContractTests {
 
 	@Test
 	void deleteOwnerRemovesOwner() {
-		OwnerCreateDto dto = new OwnerCreateDto("Delete", "Owner", "789 Pine", "Town", "9998887776");
+		OwnerCreateDto dto = new OwnerCreateDto("Delete", "Owner", "789 Pine", "Town", "9998887776", null);
 		ResponseEntity<OwnerDto> createResponse = restTemplate.postForEntity("/api/v1/owners", dto, OwnerDto.class);
 		Integer id = createResponse.getBody().id();
 

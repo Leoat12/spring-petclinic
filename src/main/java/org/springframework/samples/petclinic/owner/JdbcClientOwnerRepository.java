@@ -47,6 +47,7 @@ public class JdbcClientOwnerRepository implements OwnerRepository {
 		owner.setAddress(rs.getString("address"));
 		owner.setCity(rs.getString("city"));
 		owner.setTelephone(rs.getString("telephone"));
+		owner.setEmail(rs.getString("email"));
 		return owner;
 	};
 
@@ -65,14 +66,14 @@ public class JdbcClientOwnerRepository implements OwnerRepository {
 		List<Owner> owners;
 		if (pageable.isUnpaged()) {
 			owners = jdbcClient.sql(
-					"SELECT id, first_name, last_name, address, city, telephone FROM owners WHERE last_name LIKE :lastName ORDER BY last_name, first_name")
+					"SELECT id, first_name, last_name, address, city, telephone, email FROM owners WHERE last_name LIKE :lastName ORDER BY last_name, first_name")
 				.param("lastName", lastName + "%")
 				.query(ownerRowMapper)
 				.list();
 		}
 		else {
 			owners = jdbcClient.sql(
-					"SELECT id, first_name, last_name, address, city, telephone FROM owners WHERE last_name LIKE :lastName ORDER BY last_name, first_name LIMIT :limit OFFSET :offset")
+					"SELECT id, first_name, last_name, address, city, telephone, email FROM owners WHERE last_name LIKE :lastName ORDER BY last_name, first_name LIMIT :limit OFFSET :offset")
 				.param("lastName", lastName + "%")
 				.param("limit", pageable.getPageSize())
 				.param("offset", pageable.getOffset())
@@ -87,7 +88,7 @@ public class JdbcClientOwnerRepository implements OwnerRepository {
 	@Transactional(readOnly = true)
 	public Optional<Owner> findById(Integer id) {
 		Optional<Owner> owner = jdbcClient
-			.sql("SELECT id, first_name, last_name, address, city, telephone FROM owners WHERE id = :id")
+			.sql("SELECT id, first_name, last_name, address, city, telephone, email FROM owners WHERE id = :id")
 			.param("id", id)
 			.query(ownerRowMapper)
 			.optional();
@@ -102,22 +103,23 @@ public class JdbcClientOwnerRepository implements OwnerRepository {
 			KeyHolder keyHolder = new GeneratedKeyHolder();
 			jdbcTemplate.update(con -> {
 				var ps = con.prepareStatement(
-						"INSERT INTO owners (first_name, last_name, address, city, telephone) VALUES (?, ?, ?, ?, ?)",
+						"INSERT INTO owners (first_name, last_name, address, city, telephone, email) VALUES (?, ?, ?, ?, ?, ?)",
 						java.sql.Statement.RETURN_GENERATED_KEYS);
 				ps.setString(1, owner.getFirstName());
 				ps.setString(2, owner.getLastName());
 				ps.setString(3, owner.getAddress());
 				ps.setString(4, owner.getCity());
 				ps.setString(5, owner.getTelephone());
+				ps.setString(6, owner.getEmail());
 				return ps;
 			}, keyHolder);
 			owner.setId(keyHolder.getKey().intValue());
 		}
 		else {
 			jdbcTemplate.update(
-					"UPDATE owners SET first_name=?, last_name=?, address=?, city=?, telephone=? WHERE id=?",
+					"UPDATE owners SET first_name=?, last_name=?, address=?, city=?, telephone=?, email=? WHERE id=?",
 					owner.getFirstName(), owner.getLastName(), owner.getAddress(), owner.getCity(),
-					owner.getTelephone(), owner.getId());
+					owner.getTelephone(), owner.getEmail(), owner.getId());
 		}
 		savePets(owner);
 		return owner;
@@ -127,7 +129,7 @@ public class JdbcClientOwnerRepository implements OwnerRepository {
 	@Transactional(readOnly = true)
 	public List<Owner> findAll() {
 		List<Owner> owners = jdbcClient.sql(
-				"SELECT id, first_name, last_name, address, city, telephone FROM owners ORDER BY last_name, first_name")
+				"SELECT id, first_name, last_name, address, city, telephone, email FROM owners ORDER BY last_name, first_name")
 			.query(ownerRowMapper)
 			.list();
 		loadPetsAndVisitsForOwners(owners);
@@ -141,13 +143,13 @@ public class JdbcClientOwnerRepository implements OwnerRepository {
 		List<Owner> owners;
 		if (pageable.isUnpaged()) {
 			owners = jdbcClient.sql(
-					"SELECT id, first_name, last_name, address, city, telephone FROM owners ORDER BY last_name, first_name")
+					"SELECT id, first_name, last_name, address, city, telephone, email FROM owners ORDER BY last_name, first_name")
 				.query(ownerRowMapper)
 				.list();
 		}
 		else {
 			owners = jdbcClient.sql(
-					"SELECT id, first_name, last_name, address, city, telephone FROM owners ORDER BY last_name, first_name LIMIT :limit OFFSET :offset")
+					"SELECT id, first_name, last_name, address, city, telephone, email FROM owners ORDER BY last_name, first_name LIMIT :limit OFFSET :offset")
 				.param("limit", pageable.getPageSize())
 				.param("offset", pageable.getOffset())
 				.query(ownerRowMapper)

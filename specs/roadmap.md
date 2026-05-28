@@ -116,11 +116,11 @@ Add Kotlin support to the project and migrate the domain model layer.
 
 First feature from TODO.md. Built on the new Kotlin models + Spring Data JDBC foundation.
 
-- [ ] Add `email` field to `Owner` entity and schema migration (H2, PostgreSQL)
-- [ ] Add REST API endpoint support (DTO, controller, validation)
-- [ ] Update Thymeleaf owner forms and list views to show email
-- [ ] Add tests (unit, integration, contract, mutation)
-- [ ] Verify: owner can be created/edited with an email via both API and UI
+- [x] Add `email` field to `Owner` entity and schema migration (H2, PostgreSQL)
+- [x] Add REST API endpoint support (DTO, controller, validation)
+- [x] Update Thymeleaf owner forms and list views to show email
+- [x] Add tests (unit, integration, contract, mutation)
+- [x] Verify: owner can be created/edited with an email via both API and UI
 
 ---
 

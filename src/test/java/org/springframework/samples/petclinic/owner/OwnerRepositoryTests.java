@@ -85,11 +85,74 @@ class OwnerRepositoryTests {
 		owner.setAddress("4, Evans Street");
 		owner.setCity("Wollongong");
 		owner.setTelephone("4444444444");
+		owner.setEmail("sam@schultz.com");
 		owners.save(owner);
 		assertThat(owner.getId()).isNotZero();
 
 		ownersPage = owners.findByLastNameStartingWith("Schultz", pageable);
 		assertThat(ownersPage.getTotalElements()).isEqualTo(found + 1);
+	}
+
+	@Test
+	@Transactional
+	void shouldInsertOwnerWithoutEmail() {
+		Owner owner = new Owner();
+		owner.setFirstName("NoEmail");
+		owner.setLastName("Owner");
+		owner.setAddress("123 Street");
+		owner.setCity("City");
+		owner.setTelephone("1234567890");
+		owners.save(owner);
+		assertThat(owner.getId()).isNotZero();
+
+		Optional<Owner> loaded = owners.findById(owner.getId());
+		assertThat(loaded).isPresent();
+		assertThat(loaded.get().getEmail()).isNull();
+	}
+
+	@Test
+	@Transactional
+	void shouldPersistEmail() {
+		Owner owner = new Owner();
+		owner.setFirstName("Email");
+		owner.setLastName("Test");
+		owner.setAddress("123 Street");
+		owner.setCity("City");
+		owner.setTelephone("1234567890");
+		owner.setEmail("email@test.com");
+		owners.save(owner);
+
+		Optional<Owner> loaded = owners.findById(owner.getId());
+		assertThat(loaded).isPresent();
+		assertThat(loaded.get().getEmail()).isEqualTo("email@test.com");
+	}
+
+	@Test
+	@Transactional
+	void shouldUpdateEmail() {
+		Optional<Owner> optionalOwner = owners.findById(1);
+		assertThat(optionalOwner).isPresent();
+		Owner owner = optionalOwner.get();
+		owner.setEmail("updated@email.com");
+		owners.save(owner);
+
+		Optional<Owner> reloaded = owners.findById(1);
+		assertThat(reloaded).isPresent();
+		assertThat(reloaded.get().getEmail()).isEqualTo("updated@email.com");
+	}
+
+	@Test
+	@Transactional
+	void shouldClearEmail() {
+		Optional<Owner> optionalOwner = owners.findById(1);
+		assertThat(optionalOwner).isPresent();
+		Owner owner = optionalOwner.get();
+		owner.setEmail(null);
+		owners.save(owner);
+
+		Optional<Owner> reloaded = owners.findById(1);
+		assertThat(reloaded).isPresent();
+		assertThat(reloaded.get().getEmail()).isNull();
 	}
 
 	@Test

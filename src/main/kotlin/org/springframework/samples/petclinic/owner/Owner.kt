@@ -6,6 +6,7 @@ import org.springframework.core.style.ToStringCreator
 import org.springframework.samples.petclinic.model.Person
 import org.springframework.util.Assert
 
+import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
 
@@ -20,6 +21,9 @@ open class Owner : Person() {
  @NotBlank
  @Pattern(regexp = "\\d{10}", message = "{telephone.invalid}")
  var telephone: String? = null
+
+ @Email
+ var email: String? = null
 
  private val _pets: MutableList<Pet> = ArrayList()
 
@@ -62,6 +66,7 @@ open class Owner : Person() {
   .append("address", address)
   .append("city", city)
   .append("telephone", telephone)
+  .append("email", email)
   .toString()
 
  fun addVisit(petId: Int?, visit: Visit?) {

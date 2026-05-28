@@ -50,7 +50,8 @@ class OwnerRestControllerIntegrationTests {
 
 	@Test
 	void shouldCreateOwner() {
-		OwnerCreateDto dto = new OwnerCreateDto("John", "Doe", "123 Main St", "Springfield", "5551234567");
+		OwnerCreateDto dto = new OwnerCreateDto("John", "Doe", "123 Main St", "Springfield", "5551234567",
+				"john@doe.com");
 
 		ResponseEntity<OwnerDto> response = restTemplate.postForEntity("/api/v1/owners", dto, OwnerDto.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
@@ -61,7 +62,7 @@ class OwnerRestControllerIntegrationTests {
 
 	@Test
 	void shouldRejectCreateOwnerWithInvalidData() {
-		OwnerCreateDto dto = new OwnerCreateDto("", "", "", "", "abc");
+		OwnerCreateDto dto = new OwnerCreateDto("", "", "", "", "abc", "invalid-email");
 
 		ResponseEntity<String> response = restTemplate.postForEntity("/api/v1/owners", dto, String.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
@@ -70,7 +71,7 @@ class OwnerRestControllerIntegrationTests {
 	@Test
 	void shouldUpdateOwner() {
 		OwnerUpdateDto dto = new OwnerUpdateDto("UpdatedName", "Franklin", "110 W. Liberty St.", "Madison",
-				"6085551023");
+				"6085551023", "updated@email.com");
 
 		ResponseEntity<OwnerDto> response = restTemplate.exchange("/api/v1/owners/1", HttpMethod.PUT,
 				new HttpEntity<>(dto), OwnerDto.class);
@@ -81,7 +82,8 @@ class OwnerRestControllerIntegrationTests {
 
 	@Test
 	void shouldReturnNotFoundWhenUpdatingNonExistentOwner() {
-		OwnerUpdateDto dto = new OwnerUpdateDto("Updated", "Franklin", "110 W. Liberty St.", "Madison", "6085551023");
+		OwnerUpdateDto dto = new OwnerUpdateDto("Updated", "Franklin", "110 W. Liberty St.", "Madison", "6085551023",
+				null);
 
 		ResponseEntity<String> response = restTemplate.exchange("/api/v1/owners/999", HttpMethod.PUT,
 				new HttpEntity<>(dto), String.class);
@@ -90,7 +92,7 @@ class OwnerRestControllerIntegrationTests {
 
 	@Test
 	void shouldDeleteOwner() {
-		OwnerCreateDto dto = new OwnerCreateDto("Delete", "Me", "123 St", "City", "1234567890");
+		OwnerCreateDto dto = new OwnerCreateDto("Delete", "Me", "123 St", "City", "1234567890", null);
 		ResponseEntity<OwnerDto> createResponse = restTemplate.postForEntity("/api/v1/owners", dto, OwnerDto.class);
 		Integer id = createResponse.getBody().id();
 
@@ -104,6 +106,43 @@ class OwnerRestControllerIntegrationTests {
 		ResponseEntity<String> deleteResponse = restTemplate.exchange("/api/v1/owners/999", HttpMethod.DELETE, null,
 				String.class);
 		assertThat(deleteResponse.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+	}
+
+	@Test
+	void shouldCreateOwnerWithEmail() {
+		OwnerCreateDto dto = new OwnerCreateDto("Email", "Test", "789 Elm St", "Boston", "6175551234",
+				"email@test.com");
+		ResponseEntity<OwnerDto> response = restTemplate.postForEntity("/api/v1/owners", dto, OwnerDto.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+		assertThat(response.getBody()).isNotNull();
+		assertThat(response.getBody().email()).isEqualTo("email@test.com");
+	}
+
+	@Test
+	void shouldCreateOwnerWithoutEmail() {
+		OwnerCreateDto dto = new OwnerCreateDto("No", "Email", "456 Pine St", "Chicago", "3125551234", null);
+		ResponseEntity<OwnerDto> response = restTemplate.postForEntity("/api/v1/owners", dto, OwnerDto.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+		assertThat(response.getBody()).isNotNull();
+		assertThat(response.getBody().email()).isNull();
+	}
+
+	@Test
+	void shouldUpdateOwnerEmail() {
+		OwnerUpdateDto dto = new OwnerUpdateDto("George", "Franklin", "110 W. Liberty St.", "Madison", "6085551023",
+				"new@email.com");
+		ResponseEntity<OwnerDto> response = restTemplate.exchange("/api/v1/owners/1", HttpMethod.PUT,
+				new HttpEntity<>(dto), OwnerDto.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).isNotNull();
+		assertThat(response.getBody().email()).isEqualTo("new@email.com");
+	}
+
+	@Test
+	void shouldRejectCreateOwnerWithInvalidEmail() {
+		OwnerCreateDto dto = new OwnerCreateDto("Bad", "Email", "123 St", "City", "1234567890", "not-an-email");
+		ResponseEntity<String> response = restTemplate.postForEntity("/api/v1/owners", dto, String.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 	}
 
 }

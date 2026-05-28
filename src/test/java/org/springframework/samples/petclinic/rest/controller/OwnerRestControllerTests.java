@@ -51,6 +51,7 @@ class OwnerRestControllerTests {
 		george.setAddress("110 W. Liberty St.");
 		george.setCity("Madison");
 		george.setTelephone("6085551023");
+		george.setEmail("george@franklin.com");
 		return george;
 	}
 
@@ -70,7 +71,7 @@ class OwnerRestControllerTests {
 		given(ownerMapper.toDto(any(Owner.class))).willAnswer(invocation -> {
 			Owner owner = invocation.getArgument(0);
 			return new OwnerDto(owner.getId(), owner.getFirstName(), owner.getLastName(), owner.getAddress(),
-					owner.getCity(), owner.getTelephone(), List.of());
+					owner.getCity(), owner.getTelephone(), owner.getEmail(), List.of());
 		});
 		given(ownerMapper.toEntity(any(org.springframework.samples.petclinic.rest.dto.OwnerCreateDto.class)))
 			.willAnswer(invocation -> {
@@ -81,6 +82,7 @@ class OwnerRestControllerTests {
 				owner.setAddress(dto.address());
 				owner.setCity(dto.city());
 				owner.setTelephone(dto.telephone());
+				owner.setEmail(dto.email());
 				return owner;
 			});
 		doAnswer(invocation -> {
@@ -91,6 +93,7 @@ class OwnerRestControllerTests {
 			owner.setAddress(dto.address());
 			owner.setCity(dto.city());
 			owner.setTelephone(dto.telephone());
+			owner.setEmail(dto.email());
 			return null;
 		}).when(ownerMapper)
 			.updateEntity(any(org.springframework.samples.petclinic.rest.dto.OwnerUpdateDto.class), any(Owner.class));
@@ -113,7 +116,8 @@ class OwnerRestControllerTests {
 			.andExpect(jsonPath("$.lastName").value("Franklin"))
 			.andExpect(jsonPath("$.address").value("110 W. Liberty St."))
 			.andExpect(jsonPath("$.city").value("Madison"))
-			.andExpect(jsonPath("$.telephone").value("6085551023"));
+			.andExpect(jsonPath("$.telephone").value("6085551023"))
+			.andExpect(jsonPath("$.email").value("george@franklin.com"));
 	}
 
 	@Test
@@ -124,6 +128,17 @@ class OwnerRestControllerTests {
 
 	@Test
 	void createOwner() throws Exception {
+		mockMvc.perform(post("/api/v1/owners").contentType(MediaType.APPLICATION_JSON)
+			.content(
+					"""
+							{"firstName":"Joe","lastName":"Bloggs","address":"123 Caramel Street","city":"London","telephone":"1316761638","email":"joe@bloggs.com"}"""))
+			.andExpect(status().isCreated())
+			.andExpect(jsonPath("$.firstName").value("Joe"))
+			.andExpect(jsonPath("$.email").value("joe@bloggs.com"));
+	}
+
+	@Test
+	void createOwnerWithoutEmail() throws Exception {
 		mockMvc.perform(post("/api/v1/owners").contentType(MediaType.APPLICATION_JSON)
 			.content(
 					"""
