@@ -128,9 +128,9 @@ First feature from TODO.md. Built on the new Kotlin models + Spring Data JDBC fo
 
 Migrate repository and service layers to Kotlin.
 
-- [ ] Migrate repository implementations to Kotlin (using Spring Data JDBC idioms)
-- [ ] Migrate service classes to Kotlin
-- [ ] Verify: all tests pass; services and repos are idiomatic Kotlin
+- [x] Migrate repository implementations to Kotlin (using Spring Data JDBC idioms)
+- [x] Migrate service classes to Kotlin
+- [x] Verify: all tests pass; services and repos are idiomatic Kotlin
 
 ---
 
