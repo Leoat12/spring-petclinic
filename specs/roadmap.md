@@ -221,3 +221,97 @@ Once all views have been migrated, clean up the server-rendered layer.
 - [ ] Remove `WebMvc` controllers that only served Thymeleaf views
 - [ ] Configure Spring Boot to serve `frontend/` static assets and forward SPA routes
 - [ ] Verify: full app usable via Vue.js SPA only; no Thymeleaf artifacts remain
+
+---
+
+## Phase 19 — Service Layer Introduction
+
+Introduce a Kotlin service layer between controllers and repositories to encapsulate business logic, transaction boundaries, and validation.
+
+- [ ] Create `OwnerService`, `VetService`, `PetService`, `VisitService`, `FeedbackService` in Kotlin
+- [ ] Move validation logic and multi-repository operations out of controllers into services
+- [ ] Controllers depend on services, not repositories
+- [ ] Move `@Transactional` annotations from controllers to service methods
+- [ ] Update all controller and test wiring
+- [ ] Verify: all existing tests pass; controllers no longer inject repositories directly
+
+---
+
+## Phase 20 — Owner Search by Email
+
+Add the ability to search owners by email via the REST API.
+
+- [ ] Add `GET /api/v1/owners?email={email}` — exact match query parameter
+- [ ] Add `GET /api/v1/owners?emailContains={substring}` — partial match query parameter
+- [ ] Add Kotlin repository methods using `JdbcClient`
+- [ ] Update the owner list view to optionally filter by email
+- [ ] Add integration and contract tests
+- [ ] Verify: owners can be searched by exact or partial email match via the API
+
+---
+
+## Phase 21 — API Versioning Strategy
+
+Document and formalize the API versioning convention before the Vue.js frontend depends heavily on the API.
+
+- [ ] Document versioning convention (URL-path: `/api/v1/`) in `API_CONVENTIONS.md`
+- [ ] Decide and document: URL-path versioning as the standard approach
+- [ ] Define guidelines for when and how to introduce `/api/v2`
+- [ ] Add deprecation headers to existing endpoints when `v2` is introduced in the future
+- [ ] Verify: API conventions document reviewed and versioning strategy is clear
+
+---
+
+## Phase 22 — Vet CRUD Endpoints
+
+Complete the REST API for vets and specialties by adding write endpoints.
+
+- [ ] Add `POST /api/v1/vets` — create a vet
+- [ ] Add `PUT /api/v1/vets/{id}` — update a vet
+- [ ] Add `DELETE /api/v1/vets/{id}` — delete a vet
+- [ ] Add `POST /api/v1/specialties` — create a specialty
+- [ ] Add `PUT /api/v1/specialties/{id}` — update a specialty
+- [ ] Add corresponding Kotlin service layer methods and repository queries
+- [ ] Add integration and contract tests for all new endpoints
+- [ ] Verify: vets and specialties can be created, updated, and deleted via the API
+
+---
+
+## Phase 23 — Feedback Update & Delete
+
+Add update and delete operations for the feedback resource (admin-level endpoints).
+
+- [ ] Add `PUT /api/v1/feedback/{id}` — update feedback
+- [ ] Add `DELETE /api/v1/feedback/{id}` — delete feedback
+- [ ] Add confirmation UI for delete in the admin view
+- [ ] Add integration and contract tests for new endpoints
+- [ ] Note: admin role gating will be added in Phase 24 (Authentication & Authorization)
+- [ ] Verify: feedback can be updated and deleted via the API
+
+---
+
+## Phase 24 — Authentication & Authorization
+
+Introduce Spring Security with JWT-based authentication and role-based access control. Implemented after Vue.js replaces Thymeleaf to avoid building two auth systems.
+
+- [ ] Add Spring Security with JWT authentication (API-first, no server-rendered login)
+- [ ] Define roles: `ADMIN`, `VET`, `OWNER`
+- [ ] Secure write endpoints (`POST`, `PUT`, `DELETE`) behind appropriate roles
+- [ ] Leave read endpoints publicly accessible (list owners, vets, etc.)
+- [ ] Add Vue.js login page and client-side route guards
+- [ ] Add token refresh and logout endpoints
+- [ ] Gate Phase 23 feedback admin endpoints behind `ADMIN` role
+- [ ] Add integration and contract tests for secured endpoints
+- [ ] Verify: unauthenticated requests to write endpoints return 401; role-gated endpoints return 403
+
+---
+
+## Phase 25 — Kubernetes Deployment Manifests
+
+Add Kubernetes manifests for deploying PetClinic to a local Kubernetes cluster, aligning with the project mission of teaching developer workflows and CI/CD.
+
+- [ ] Create `k8s/` directory with `deployment.yaml`, `service.yaml`, `configmap.yaml`
+- [ ] Add a PostgreSQL StatefulSet or reference an external database
+- [ ] Add `k8s/README.md` with `kubectl apply` instructions
+- [ ] Optionally add a Helm chart under `helm/petclinic/`
+- [ ] Verify: `kind` or `minikube` can run the full stack locally
