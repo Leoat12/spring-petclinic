@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'feedback')}">
+
+<body>
+
+  <h2 th:text="#{feedback}">Feedback</h2>
+
+  <table class="table table-striped" id="feedback-table">
+    <thead>
+      <tr>
+        <th th:text="#{feedbackName}">Name</th>
+        <th th:text="#{feedbackEmail}">Email</th>
+        <th th:text="#{feedbackMessage}">Message</th>
+        <th th:text="#{date}">Submitted</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="feedback : ${feedbackList}">
+        <td th:text="${feedback.name}"></td>
+        <td th:text="${feedback.email}"></td>
+        <td th:text="${feedback.message}"></td>
+        <td th:text="${#temporals.format(feedback.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+      </tr>
+    </tbody>
+  </table>
+
+</body>
+
+</html>

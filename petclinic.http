@@ -103,6 +103,23 @@ Content-Type: application/json
 }
 
 ### ---------------------------------------------------------------------------
+### Feedback
+### ---------------------------------------------------------------------------
+
+### Submit feedback
+POST {{baseUrl}}/api/v1/feedback
+Content-Type: application/json
+
+{
+  "name": "Jane Doe",
+  "email": "jane@example.com",
+  "message": "Great clinic!"
+}
+
+### List all feedback
+GET {{baseUrl}}/api/v1/feedback
+
+### ---------------------------------------------------------------------------
 ### Vets
 ### ---------------------------------------------------------------------------
 

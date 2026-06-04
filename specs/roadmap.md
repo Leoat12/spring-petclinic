@@ -136,14 +136,14 @@ Migrate repository and service layers to Kotlin.
 
 ## Phase 11 — Feedback Form Feature
 
-Second feature from TODO.md. Exercises the full Kotlin + JDBC stack.
+Second feature from TODO.md. Built on the new Kotlin + Spring Data JDBC foundation.
 
-- [ ] Define `Feedback` entity (Kotlin data class: name, email, message, createdAt) and schema migration (H2, PostgreSQL)
-- [ ] Add repository, service, and REST API endpoint (`POST /api/v1/feedback`)
-- [ ] Add Thymeleaf form for submitting feedback
-- [ ] Add validation (non-blank, email format, message length)
-- [ ] Add tests (unit, integration, contract, mutation)
-- [ ] Verify: feedback can be submitted via API and UI; stored in DB; appears in admin view
+- [x] Define `Feedback` entity (Kotlin data class: name, email, message, createdAt) and schema migration (H2, PostgreSQL)
+- [x] Add repository, service, and REST API endpoint (`POST /api/v1/feedback`)
+- [x] Add Thymeleaf form for submitting feedback
+- [x] Add validation (non-blank, email format, message length)
+- [x] Add tests (unit, integration, contract, mutation)
+- [x] Verify: feedback can be submitted via API and UI; stored in DB; appears in admin view
 
 ---
 
