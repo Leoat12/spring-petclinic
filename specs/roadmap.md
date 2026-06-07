@@ -151,10 +151,10 @@ Second feature from TODO.md. Built on the new Kotlin + Spring Data JDBC foundati
 
 Migrate controllers and configuration to Kotlin; complete the language migration.
 
-- [ ] Migrate REST controllers and WebMvc controllers to Kotlin
-- [ ] Migrate Spring configuration classes to Kotlin
-- [ ] Remove all Java source files; project is 100% Kotlin
-- [ ] Verify: application compiles and runs as pure Kotlin; no `.java` source files remain
+- [x] Migrate REST controllers and WebMvc controllers to Kotlin
+- [x] Migrate Spring configuration classes to Kotlin
+- [x] Remove all Java source files; project is 100% Kotlin
+- [x] Verify: application compiles and runs as pure Kotlin; no `.java` source files remain
 
 ---
 
