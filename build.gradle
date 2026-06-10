@@ -164,3 +164,41 @@ pitest {
 springBoot {
   buildInfo()
 }
+
+def npmCommand = 'npm'
+
+task installFrontendDeps(type: Exec) {
+  workingDir 'frontend'
+  commandLine npmCommand, 'install'
+  inputs.file 'frontend/package.json'
+  inputs.file 'frontend/package-lock.json'
+  outputs.dir 'frontend/node_modules'
+  mustRunAfter 'checkstyleNohttp'
+}
+
+task buildFrontend(type: Exec) {
+  dependsOn installFrontendDeps
+  workingDir 'frontend'
+  commandLine npmCommand, 'run', 'build'
+  inputs.dir 'frontend/src'
+  inputs.file 'frontend/vite.config.ts'
+  inputs.file 'frontend/package.json'
+  inputs.file 'frontend/index.html'
+  outputs.dir 'frontend/dist'
+  mustRunAfter 'checkstyleNohttp'
+}
+
+task copyFrontendForDev(type: Copy) {
+  dependsOn buildFrontend
+  from 'frontend/dist'
+  into 'build/resources/main/static'
+}
+
+if (!project.hasProperty('skipFrontend')) {
+  bootJar {
+    dependsOn buildFrontend
+    from('frontend/dist') {
+      into('BOOT-INF/classes/static')
+    }
+  }
+}
