@@ -162,11 +162,11 @@ Migrate controllers and configuration to Kotlin; complete the language migration
 
 Introduce Vue.js to replace Thymeleaf views incrementally.
 
-- [ ] Scaffold Vue.js app in `frontend/` with Vite
-- [ ] Configure proxy to Spring Boot backend during development
-- [ ] Replace the Welcome / home page Thymeleaf view with a Vue.js page
-- [ ] Wire up Vue Router for SPA navigation
-- [ ] Verify: home page renders from Vue; all other pages still served by Thymeleaf
+- [x] Scaffold Vue.js app in `frontend/` with Vite
+- [x] Configure proxy to Spring Boot backend during development
+- [x] Replace the Welcome / home page Thymeleaf view with a Vue.js page
+- [x] Wire up Vue Router for SPA navigation
+- [x] Verify: home page renders from Vue; all other pages still served by Thymeleaf
 
 ---
 
